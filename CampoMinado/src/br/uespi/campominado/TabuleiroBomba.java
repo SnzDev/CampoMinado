@@ -18,7 +18,7 @@ public class TabuleiroBomba extends Tabuleiro {
     protected int quantidadeBombas; //Default 16%
 
     public TabuleiroBomba(int x, int y) {
-        super(x,y);
+        super(x, y);
         this.y = y + 1;
         this.x = x + 1;
         //System.out.println(this.quantidadeBombas);
@@ -27,6 +27,11 @@ public class TabuleiroBomba extends Tabuleiro {
     }
 
     //Métodos
+    public int getQuantidadeBombas() {
+        return quantidadeBombas;
+    }
 
-    
+    public void setQuantidadeBombas(int quantidadeBombas) {
+        this.quantidadeBombas = quantidadeBombas;
+    }
 }

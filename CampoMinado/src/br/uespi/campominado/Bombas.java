@@ -50,8 +50,8 @@ public class Bombas extends TabuleiroBomba {
                 for (j = 0; j < this.quantidadeBombas; j++) {
                     if (i != j) {
                         while ((this.posicaoBombaX[i] == this.posicaoBombaX[j]) && (this.posicaoBombaY[i] == this.posicaoBombaY[j])) {
-                            this.posicaoBombaX[i] = gerarNumeroAleatorio(this.y);
-                            this.posicaoBombaY[i] = gerarNumeroAleatorio(this.x);
+                            this.posicaoBombaX[i] = gerarNumeroAleatorio(this.x);
+                            this.posicaoBombaY[i] = gerarNumeroAleatorio(this.y);
                             //System.out.println("Duplicado");
                         }
                     }
@@ -60,7 +60,8 @@ public class Bombas extends TabuleiroBomba {
         }
     }
 
-    public void geraTabuleiroSoBomba() {
+    public void geraTabuleiro() {
+        geraBombas();
         int i, j;
         this.tabuleiro[0][0] = "X/Y"; //Posição 0/0
         for (i = 1; i < this.y; i++) { //Coordenada Y
@@ -79,45 +80,45 @@ public class Bombas extends TabuleiroBomba {
         for (i = 0; i < this.quantidadeBombas; i++) {
             int bx = this.posicaoBombaX[i];
             int by = this.posicaoBombaY[i];
-            this.tabuleiro[bx][by] = "@";
-            
+            this.tabuleiro[by][bx] = "@";
+
             //Lados
-            numeraBombaEsquerda(bx,by);
-            numeraBombaDireita(bx,by);
+            numeraBombaEsquerda(bx, by);
+            numeraBombaDireita(bx, by);
             //Topo
-            numeraBombaTopoEsquerda(bx,by);
-            numeraBombaTopoMeio(bx,by);
-            numeraBombaTopoDireita(bx,by);
+            numeraBombaTopoEsquerda(bx, by);
+            numeraBombaTopoMeio(bx, by);
+            numeraBombaTopoDireita(bx, by);
             //Baixo
-            numeraBombaBaixoEsquerda(bx,by);
-            numeraBombaBaixoMeio(bx,by);
-            numeraBombaBaixoDireita(bx,by);
+            numeraBombaBaixoEsquerda(bx, by);
+            numeraBombaBaixoMeio(bx, by);
+            numeraBombaBaixoDireita(bx, by);
         }
     }
 
     public void numeraBombaEsquerda(int bx, int by) {
-        
+
         if (bx - 1 > 0) {
-            String e = this.tabuleiro[by][bx-1];//E
+            String e = this.tabuleiro[by][bx - 1];//E
             if (e != "@") {
                 String value = "0";
                 if (e != " ") {
                     value = e;
                 }
-                this.tabuleiro[by][bx-1] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by][bx - 1] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
 
     public void numeraBombaDireita(int bx, int by) {
         if (bx + 1 > 0 && bx + 1 < tabuleiro[0].length) {
-            String d = this.tabuleiro[by][bx+1];//D
+            String d = this.tabuleiro[by][bx + 1];//D
             if (d != "@") {
                 String value = "0";
                 if (d != " ") {
                     value = d;
                 }
-                this.tabuleiro[by][bx+1] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by][bx + 1] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
@@ -140,13 +141,13 @@ public class Bombas extends TabuleiroBomba {
     public void numeraBombaTopoMeio(int bx, int by) {
 
         if (by - 1 > 0) {
-            String tm = this.tabuleiro[by-1][bx];//TM
+            String tm = this.tabuleiro[by - 1][bx];//TM
             if (tm != "@") {
                 String value = "0";
                 if (tm != " ") {
                     value = tm;
                 }
-                this.tabuleiro[by-1][bx] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by - 1][bx] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
@@ -154,13 +155,13 @@ public class Bombas extends TabuleiroBomba {
     public void numeraBombaTopoDireita(int bx, int by) {
 
         if (bx + 1 > 0 && bx + 1 < tabuleiro[0].length && by - 1 > 0) {
-            String td = this.tabuleiro[by-1][bx+1];//TD  
+            String td = this.tabuleiro[by - 1][bx + 1];//TD  
             if (td != "@") {
                 String value = "0";
                 if (td != " ") {
                     value = td;
                 }
-                this.tabuleiro[by-1][bx+1] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by - 1][bx + 1] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
@@ -168,40 +169,48 @@ public class Bombas extends TabuleiroBomba {
     public void numeraBombaBaixoEsquerda(int bx, int by) {
         //rodapé
         if (bx - 1 > 0 && by + 1 > 0 && by + 1 < tabuleiro.length) {
-            String be = this.tabuleiro[by+1][bx-1];//BE
+            String be = this.tabuleiro[by + 1][bx - 1];//BE
             if (be != "@") {
                 String value = "0";
                 if (be != " ") {
                     value = be;
                 }
-                this.tabuleiro[by+1][bx-1] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by + 1][bx - 1] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
 
     public void numeraBombaBaixoMeio(int bx, int by) {
         if (by + 1 >= 0 && by + 1 < tabuleiro.length) {
-            String bm = this.tabuleiro[by+1][bx];//BM
+            String bm = this.tabuleiro[by + 1][bx];//BM
             if (bm != "@") {
                 String value = "0";
                 if (bm != " ") {
                     value = bm;
                 }
-                this.tabuleiro[by+1][bx] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by + 1][bx] = Integer.toString(Integer.parseInt(value) + 1);
             }
         }
     }
 
     public void numeraBombaBaixoDireita(int bx, int by) {
         if (bx + 1 > 0 && bx + 1 < tabuleiro[0].length && by + 1 > 0 && by + 1 < tabuleiro.length) {
-            String bd = this.tabuleiro[by+1][bx+1];//BD
+            String bd = this.tabuleiro[by + 1][bx + 1];//BD
             if (bd != "@") {
                 String value = "0";
                 if (bd != " ") {
                     value = bd;
                 }
-                this.tabuleiro[by+1][bx+1] = Integer.toString(Integer.parseInt(value) + 1);
+                this.tabuleiro[by + 1][bx + 1] = Integer.toString(Integer.parseInt(value) + 1);
             }
+        }
+    }
+
+    public void mostraPosicaoBombas() {
+        int i;
+        System.out.println("Quantidade de Bombas: " + this.quantidadeBombas);
+        for (i = 0; i < this.quantidadeBombas; i++) {
+            System.out.println("Bomba:" + (i + 1) + " X:" + this.posicaoBombaX[i] + "/Y:" + this.posicaoBombaY[i]);
         }
     }
 

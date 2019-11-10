@@ -12,27 +12,26 @@ package br.uespi.campominado;
 public class Tabuleiro {
 
     public String[][] tabuleiro;
-    private int x,y;
-   
+    private int x, y;
 
     public Tabuleiro(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x = x + 1;
+        this.y = y + 1;
     }
-    
-       public void imprimeTabuleiro(){
-        int i,j;
-        for(i=0;i<this.y;i++){
+
+    public void imprimeTabuleiro() {
+        int i, j;
+        for (i = 0; i < this.y; i++) {
             System.out.println();
-            for(j=0;j<this.x;j++){
-                if(i==0){
+            for (j = 0; j < this.x; j++) {
+                if (i == 0) {
                     System.out.print("" + this.tabuleiro[i][j] + "| ");
-                }else{
+                } else {
                     System.out.print("" + this.tabuleiro[i][j] + " | ");
                 }
             }
         }
         System.out.println("");
     }
-    
+
 }
