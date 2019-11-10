@@ -16,7 +16,7 @@ public class TabuleiroExibicao extends Tabuleiro {
     private int x, y;
 
     public TabuleiroExibicao(int x, int y) {
-
+        super(x,y);
         this.y = y + 1;
         this.x = x + 1;
         this.tabuleiro = new String[this.y][this.x];
