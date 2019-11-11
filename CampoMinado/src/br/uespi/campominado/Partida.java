@@ -15,8 +15,8 @@ public class Partida {
 
     private String nome;
     private int x, y;
-    private boolean perdeu = false;
-    private boolean ganhou = false;
+    private boolean perdeu;
+    private boolean ganhou;
     private Scanner sc = new Scanner(System.in);
     private int bombasMarcadas;
     private TabuleiroExibicao tabuleiroExibicao;
@@ -28,12 +28,15 @@ public class Partida {
         recuperaDados(); //Pega Nome e Tamanho do Tabuleiro
         this.tabuleiroExibicao = new TabuleiroExibicao(this.x, this.y);
         this.tabuleiroBomba = new Bombas(this.x, this.y);
-
+        this.ganhou = false;
+        this.perdeu = false;
         tabuleiroExibicao.geraTabuleiro();
         tabuleiroBomba.geraTabuleiro();
         tabuleiroExibicao.imprimeTabuleiro();
         tabuleiroBomba.imprimeTabuleiro();
-        tempoInicio = System.currentTimeMillis();
+
+        iniciaJogo();
+
     }
 
     //Métodos
@@ -93,26 +96,46 @@ public class Partida {
         int x = 0;
         while (x < 1 || y < 1 || x > this.tabuleiroExibicao.tabuleiro[0].length || y > this.tabuleiroExibicao.tabuleiro.length) {
             System.out.println("Digite a posição(X/Y)");
-            System.out.println("Digite o numero da linha:");
-            y = sc.nextInt();
-            System.out.println("Digite o numero da coluna:");
+            System.out.println("Digite o numero da Coluna:");
             x = sc.nextInt();
+            System.out.println("Digite o numero da Linha:");
+            y = sc.nextInt();
         }
 
-        if (this.tabuleiroBomba.tabuleiro[x][y].equals("@")) {
+        if (this.tabuleiroBomba.tabuleiro[y][x].equals("@")) {
+            return true;
+        } else {
+            //Meio
+            if (revelaBombaMeio(x, y)) {
+                //Lados
+                revelaBombaEsquerda(x, y);
+                revelaBombaDireita(x, y);
+                //Topo
+                revelaBombaTopoEsquerda(x, y);
+                revelaBombaTopoMeio(x, y);
+                revelaBombaTopoDireita(x, y);
+                //Baixo
+                revelaBombaBaixoEsquerda(x, y);
+                revelaBombaBaixoMeio(x, y);
+                revelaBombaBaixoDireita(x, y);
+            }
+            return false;
+        }
+
+    }
+
+    public boolean revelaBombaMeio(int bx, int by) {
+
+        String m = this.tabuleiroBomba.tabuleiro[by][bx];//E
+        if (m != "@") {
+            String value = m;
+
+            this.tabuleiroExibicao.tabuleiro[by][bx] = value;
+
+        }
+        if (m != " ") {
             return false;
         } else {
-            //Lados
-            revelaBombaEsquerda(x, y);
-            revelaBombaDireita(x, y);
-            //Topo
-            revelaBombaTopoEsquerda(x, y);
-            revelaBombaTopoMeio(x, y);
-            revelaBombaTopoDireita(x, y);
-            //Baixo
-            revelaBombaBaixoEsquerda(x, y);
-            revelaBombaBaixoMeio(x, y);
-            revelaBombaBaixoDireita(x, y);
             return true;
         }
 
@@ -123,7 +146,7 @@ public class Partida {
         if (bx - 1 > 0) {
             String e = this.tabuleiroBomba.tabuleiro[by][bx - 1];//E
             if (e != "@") {
-                String value = "0";
+                String value = e;
                 if (e != " ") {
                     value = e;
                 }
@@ -151,7 +174,7 @@ public class Partida {
         if (bx - 1 > 0 && by - 1 > 0) {
             String te = this.tabuleiroBomba.tabuleiro[by - 1][bx - 1];//TE
             if (te != "@") {
-                String value = "0";
+                String value = te;
                 if (te != " ") {
                     value = te;
                 }
@@ -165,7 +188,7 @@ public class Partida {
         if (by - 1 > 0) {
             String tm = this.tabuleiroBomba.tabuleiro[by - 1][bx];//TM
             if (tm != "@") {
-                String value = "0";
+                String value = tm;
                 if (tm != " ") {
                     value = tm;
                 }
@@ -179,7 +202,7 @@ public class Partida {
         if (bx + 1 > 0 && bx + 1 < this.tabuleiroBomba.tabuleiro[0].length && by - 1 > 0) {
             String td = this.tabuleiroBomba.tabuleiro[by - 1][bx + 1];//TD  
             if (td != "@") {
-                String value = "0";
+                String value = td;
                 if (td != " ") {
                     value = td;
                 }
@@ -193,7 +216,7 @@ public class Partida {
         if (bx - 1 > 0 && by + 1 > 0 && by + 1 < this.tabuleiroBomba.tabuleiro.length) {
             String be = this.tabuleiroBomba.tabuleiro[by + 1][bx - 1];//BE
             if (be != "@") {
-                String value = "0";
+                String value = be;
                 if (be != " ") {
                     value = be;
                 }
@@ -228,9 +251,71 @@ public class Partida {
         }
     }
 
-    public void acao() {
-        while (this.perdeu) {
+    public void iniciaJogo() {
+        this.tempoInicio = System.currentTimeMillis();
+        while (this.perdeu == false && this.ganhou == false) {
+            mostraMenu();
+            acao(this.sc.nextInt());
+        }
+        this.tempoTotal = (System.currentTimeMillis() - this.tempoInicio) / 1000;
+        if (perdeu) {
+            this.tabuleiroBomba.imprimeTabuleiro();
+            System.out.println(this.nome + " infelizmente você perdeu!");
+            System.out.println("Você durou: " + this.tempoTotal + " segundos");
+        }
+        if (ganhou) {
+            System.out.println("Parabéns " + this.nome + "Você Ganhou!");
+            System.out.println("Você durou: " + this.tempoTotal + " segundos");
+        }
 
+    }
+
+    public long getTempoTotal() {
+        return tempoTotal;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void acao(int opcao) {
+        switch (opcao) {
+            case 1:
+                this.perdeu = revelaEspaco();
+                this.ganhou = verificaGanho();
+                this.tabuleiroExibicao.imprimeTabuleiro();
+                break;
+            case 2:
+                marcarBomba();
+                this.tabuleiroExibicao.imprimeTabuleiro();
+                this.ganhou = verificaGanho();
+                break;
+            case 3:
+                desmarcarBomba();
+                this.tabuleiroExibicao.imprimeTabuleiro();
+                this.ganhou = verificaGanho();
+                break;
+            default:
+                System.out.println("Opção Inválida!");
+                break;
+        }
+    }
+
+    public boolean verificaGanho() {
+        int i, j;
+        int k = 0;
+        for (i = 0; i < this.y + 1; i++) {
+            System.out.println();
+            for (j = 0; j < this.x + 1; j++) {
+                if (this.tabuleiroExibicao.tabuleiro[i][j] == "X") {
+                    k++;
+                }
+            }
+        }
+        if (k == 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
